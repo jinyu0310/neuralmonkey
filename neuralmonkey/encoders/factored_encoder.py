@@ -69,12 +69,12 @@ class FactoredEncoder(ModelPart, Attentive):
     # pylint: enable=too-many-arguments
 
     @property
-    def _attention_mask(self):
-        return self.__attention_mask
+    def attention_mask(self):
+        return self._attention_mask
 
     @property
-    def _attention_tensor(self):
-        return self.__attention_tensor
+    def attention_tensor(self):
+        return self._attention_tensor
 
     def _get_rnn_cell(self):
         """Return the RNN cell for the encoder"""
@@ -162,11 +162,11 @@ class FactoredEncoder(ModelPart, Attentive):
         self.outputs_bidi = bidi_layer.outputs_bidi
         self.encoded = bidi_layer.encoded
 
-        self.__attention_tensor = tf.concat(1, [tf.expand_dims(o, 1)
-                                                for o in self.outputs_bidi])
-        self.__attention_tensor = tf.nn.dropout(self.__attention_tensor,
-                                                self.dropout_placeholder)
-        self.__attention_mask = tf.concat(
+        self._attention_tensor = tf.concat(1, [tf.expand_dims(o, 1)
+                                               for o in self.outputs_bidi])
+        self._attention_tensor = tf.nn.dropout(self._attention_tensor,
+                                               self.dropout_placeholder)
+        self._attention_mask = tf.concat(
             1, [tf.expand_dims(w, 1) for w in self.padding_weights])
 
     # pylint: disable=too-many-locals
